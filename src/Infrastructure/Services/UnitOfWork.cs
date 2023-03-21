@@ -7,10 +7,10 @@ namespace NETPC.ApiMercadoLibre.Infrastructure.Services
     public class UnitOfWork : IUnitOfWork
     {
         private readonly MeliApiService _repository;
-        private IGenericRepository<Site> _site;
-        private IGenericRepository<Domain> _domain;
-        private IGenericRepository<Base> _base;
-        private IGenericRepository<Category> _category;
+        private IGenericRepository<Site>? _site;
+        private IGenericRepository<Domain>? _domain;
+        private IGenericRepository<Base>? _base;
+        private IGenericRepository<Category>? _category;
 
         public UnitOfWork(MeliApiService repository) 
         {

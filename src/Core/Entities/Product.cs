@@ -43,6 +43,9 @@ namespace NETPC.ApiMercadoLibre.Core.Entities
         [JsonProperty("stop_time")]
         public DateTime StopTime { get; set; }
         public Seller Seller  { get; set; } = null!;
-
+        [JsonProperty("seller_address")]
+        public SellerAddress? SellerAddress { get; set; }
+        public Address? Address { get; set; }
+        public IList<Attribute> Attributes { get; set; } = new List<Attribute>();
     }
 }

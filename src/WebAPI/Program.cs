@@ -6,12 +6,26 @@ builder.Logging.ClearProviders().AddConsole();
 
 builder.Services.AddControllers();
 builder.Services.AddCors();
+
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+    options.HttpsPort = 7189;
+});
+
 builder.Services.AddSwaggerExtension();
 builder.Services.AddServices(builder);
 
 var app = builder.Build();
 
-app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyMethod());
+app.UseCors(cors => cors
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true)
+    .AllowCredentials()
+);
+
+
 app.ConfigureSwagger();
 app.UseHttpsRedirection();
 

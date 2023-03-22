@@ -43,6 +43,15 @@ namespace NETPC.ApiMercadoLibre.WebAPI.Extensions
               .Produces(StatusCodes.Status404NotFound)
               .Produces(StatusCodes.Status500InternalServerError)
               .Produces<Site>(StatusCodes.Status200OK);
+
+            app.MapGet("/api/get_products_by_search", GetProductsBySearch)
+              .WithName("GetProductsBySearch")
+              .WithTags("Categorías y Publicaciones")
+              .Produces(StatusCodes.Status400BadRequest)
+              .Produces(StatusCodes.Status401Unauthorized)
+              .Produces(StatusCodes.Status404NotFound)
+              .Produces(StatusCodes.Status500InternalServerError)
+              .Produces<Site>(StatusCodes.Status200OK);
         }
 
         //[SwaggerOperation(Summary = "Get player balance by Player Identifier")]
@@ -59,8 +68,27 @@ namespace NETPC.ApiMercadoLibre.WebAPI.Extensions
         public static async Task<IResult> GetCategoriesBySite(IUnitOfWork unit, string siteId)
             => Results.Ok(await unit.Base.GetAll($"/sites/{siteId}/categories"));
 
-        public static async Task<IResult> GetProductsByCategoryId(IUnitOfWork unit, string siteId, string categoryId)
-            => Results.Ok(await unit.Category.Get($"/sites/{siteId}/search?category={categoryId}"));
+        public static async Task<IResult> GetProductsByCategoryId(IUnitOfWork unit, string siteId, string categoryId, int offset = 0, string sort = "relevance")
+        {
+            Dictionary<string, string> param = new()
+            {
+                { "offset" , offset.ToString() },
+                { "category" , categoryId },
+                { "sort" , sort },
+            };
+            return Results.Ok(await unit.Category.Get($"/sites/{siteId}/search", param));
+        }            
+
+        public static async Task<IResult> GetProductsBySearch(IUnitOfWork unit, string siteId, string item, int offset = 0, string sort = "relevance")
+        {
+            Dictionary<string, string> param = new()
+            {
+                { "offset" , offset.ToString() },
+                { "q" , item },
+                { "sort" , sort },
+            };
+            return Results.Ok(await unit.Category.Get($"/sites/{siteId}/search", param));
+        }
 
     }
 }
